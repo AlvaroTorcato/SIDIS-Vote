@@ -1,18 +1,15 @@
 package com.example.sidisvote.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Entity
-@Table(name = "vote")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Vote implements Serializable {
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Data
+public class VoteDTO {
+
     private int id;
 
     private boolean vote;
@@ -22,14 +19,17 @@ public class Vote implements Serializable {
 
     private int userId;
 
-    public Vote(boolean vote, int reviewId, int userId) {
+    public VoteDTO(boolean vote, int reviewId, int userId) {
         this.vote = vote;
         this.reviewId = reviewId;
         this.userId = userId;
     }
 
-    public Vote() {
-
+    public VoteDTO(Vote vote) {
+        this.id = vote.getId();
+        this.vote = vote.isVote();
+        this.reviewId = vote.getReviewId();
+        this.userId = vote.getUserId();
     }
 
     public int getId() {
