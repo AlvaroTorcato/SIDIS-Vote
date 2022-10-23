@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+
 @Tag(name = "Votes", description = "Endpoints for managing votes")
 @RequestMapping("/votes")
 @RestController
@@ -23,5 +25,12 @@ public class VoteController {
     @ResponseStatus(HttpStatus.CREATED)
     public VoteDTO create(@RequestBody final VoteDetailsDTO resource, @PathVariable("idReview") final int idReview,@RequestParam int userId) throws IOException {
         return service.createVote(resource,idReview,userId);
+    }
+
+    @Operation(summary = "Search for votes in review")
+    @GetMapping(value = "/search/{idReview}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<VoteDTO> searchVotes(@PathVariable("idReview") final int idReview) throws IOException {
+        return service.searchVotes(idReview);
     }
 }

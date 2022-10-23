@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 @Service
 public class VoteService {
@@ -43,4 +44,11 @@ public class VoteService {
         return statusCode;
     }
 
+    public List<VoteDTO> searchVotes(int idReview) {
+        List<VoteDTO> votes = repository.findVotesInReview(idReview);
+        if (votes == null){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+        }
+        return votes;
+    }
 }
