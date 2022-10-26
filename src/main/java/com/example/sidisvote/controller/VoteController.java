@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,13 +24,12 @@ public class VoteController {
     @Operation(summary = "Make a vote in a review")
     @PostMapping(value = "/{idReview}")
     @ResponseStatus(HttpStatus.CREATED)
-    public VoteDTO create(@RequestBody final VoteDetailsDTO resource, @PathVariable("idReview") final int idReview,@RequestParam int userId) throws IOException {
-        return service.createVote(resource,idReview,userId);
+    public VoteDTO create(@RequestBody final VoteDetailsDTO resource, @PathVariable("idReview") final int idReview, HttpServletRequest request) throws IOException {
+        return service.createVote(resource,idReview,request);
     }
 
     @Operation(summary = "Search for votes in review")
     @GetMapping(value = "/search/{idReview}")
-    @ResponseStatus(HttpStatus.CREATED)
     public List<VoteDTO> searchVotes(@PathVariable("idReview") final int idReview) throws IOException {
         return service.searchVotes(idReview);
     }
