@@ -30,7 +30,7 @@ public class VoteService {
         }
         String jwt = parseJwt(request);
         UserDetailsDTO user = makeRequestToAutentication(jwt);
-        if (user.getRoles() != "[MODERADOR]" || user.getRoles() != "[COSTUMER]"){
+        if (!user.getRoles().equals("[MODERADOR]") && !user.getRoles().equals("[COSTUMER]")){
             throw  new ResponseStatusException(HttpStatus.FORBIDDEN, "Can´t be accessed by this user");
         }
         VoteDTO voteDTO = repository.findIfUserMadeAVoteInAReview(reviewId,user.getId());
