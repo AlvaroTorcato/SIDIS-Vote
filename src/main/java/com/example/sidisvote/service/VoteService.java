@@ -23,6 +23,8 @@ import java.util.List;
 public class VoteService {
     @Autowired
     private VoteRepository repository;
+    @Autowired
+    private RequestService service;
     public VoteDTO createVote(final VoteDetailsDTO resource, int reviewId, HttpServletRequest request) throws IOException {
         int statusCode = getStatusCodeOfReview(reviewId);
         if (statusCode == 404){
@@ -58,10 +60,13 @@ public class VoteService {
         return statusCode;
     }
 
-    public List<VoteDTO> searchVotes(int idReview) {
+    public List<VoteDTO> searchVotes(int idReview) throws IOException {
         List<VoteDTO> votes = repository.findVotesInReview(idReview);
         if (votes == null){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+            votes = service.retrieveVoteFromApi(idReview);
+            if (votes == null){
+                throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+            }
         }
         return votes;
     }
