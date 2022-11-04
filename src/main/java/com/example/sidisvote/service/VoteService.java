@@ -60,10 +60,13 @@ public class VoteService {
         return statusCode;
     }
 
-    public List<VoteDTO> searchVotes(int idReview) {
+    public List<VoteDTO> searchVotes(int idReview) throws IOException {
         List<VoteDTO> votes = repository.findVotesInReview(idReview);
         if (votes == null){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+            votes = service.retrieveVoteFromApi(idReview);
+            if (votes == null){
+                throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+            }
         }
         return votes;
     }
