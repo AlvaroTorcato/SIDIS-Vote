@@ -32,7 +32,7 @@ public class VoteService {
         }
         String jwt = parseJwt(request);
         UserDetailsDTO user = makeRequestToAutentication(jwt);
-        if (user.getRoles() != "[MODERADOR]" || user.getRoles() != "[COSTUMER]"){
+        if (!user.getRoles().equals("[MODERATOR]") && !user.getRoles().equals("[COSTUMER]")){
             throw  new ResponseStatusException(HttpStatus.FORBIDDEN, "Can´t be accessed by this user");
         }
         VoteDTO voteDTO = repository.findIfUserMadeAVoteInAReview(reviewId,user.getId());
@@ -60,13 +60,10 @@ public class VoteService {
         return statusCode;
     }
 
-    public List<VoteDTO> searchVotes(int idReview) throws IOException {
+    public List<VoteDTO> searchVotes(int idReview) {
         List<VoteDTO> votes = repository.findVotesInReview(idReview);
         if (votes == null){
-            votes = service.retrieveVoteFromApi(idReview);
-            if (votes == null){
-                throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
-            }
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
         }
         return votes;
     }
