@@ -5,6 +5,10 @@ public class UserDetailsDTO {
     private String username;
     private String roles;
 
+
+    public UserDetailsDTO(){
+
+    }
     public UserDetailsDTO(int id, String username, String roles) {
         this.id = id;
         this.username = username;

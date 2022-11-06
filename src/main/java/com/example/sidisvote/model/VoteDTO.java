@@ -31,6 +31,12 @@ public class VoteDTO {
         this.reviewId = vote.getReviewId();
         this.userId = vote.getUserId();
     }
+    public VoteDTO(VoteAPOD vote) {
+        this.id = vote.getId();
+        this.vote = vote.isVote();
+        this.reviewId = vote.getReviewId();
+        this.userId = vote.getUserId();
+    }
 
     public int getId() {
         return id;

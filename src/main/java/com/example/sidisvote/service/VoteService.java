@@ -44,6 +44,21 @@ public class VoteService {
         VoteDTO reviewDTO = new VoteDTO(vote);
         return reviewDTO;
     }
+    public int getStatusCodeOfReview(int reviewId){
+        int statusCode;
+        try{
+            String urlRequest = "http://localhost:8082/reviews/search/" + reviewId;
+            URL url = new URL(urlRequest);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            statusCode = connection.getResponseCode();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return statusCode;
+    }
 
     public List<VoteDTO> searchVotes(int idReview) {
         List<VoteDTO> votes = repository.findVotesInReview(idReview);
@@ -53,4 +68,37 @@ public class VoteService {
         return votes;
     }
 
+    private String parseJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7, headerAuth.length());
+        }
+
+        return null;
+    }
+
+    public UserDetailsDTO makeRequestToAutentication(String jwt){
+        String urlRequest = "http://localhost:8084/auth/search" + jwt;
+        UserDetailsDTO user = null;
+        try {
+            InputStream responseStream = openConn(urlRequest).getInputStream();
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            user = mapper.readValue(responseStream, UserDetailsDTO.class);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return user;
+    }
+    private HttpURLConnection openConn(String baseUrl) throws IOException {
+
+        URL url = new URL(baseUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("accept", "application/json");
+
+        return connection;
+    }
 }

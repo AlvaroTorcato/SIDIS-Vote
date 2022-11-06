@@ -22,7 +22,7 @@ public class RequestService {
         return null;
     }
 
-    public UserDetailsDTO makeRequestToAutentication(String jwt){
+    public UserDetailsDTO makeRequestToAutentication(String jwt) {
         String urlRequest = "http://localhost:8084/auth/search" + jwt;
         UserDetailsDTO user = null;
         try {
@@ -37,6 +37,7 @@ public class RequestService {
 
         return user;
     }
+
     private HttpURLConnection openConn(String baseUrl) throws IOException {
 
         URL url = new URL(baseUrl);
@@ -45,12 +46,13 @@ public class RequestService {
 
         return connection;
     }
-    public int getStatusCodeOfReview(int reviewId){
+
+    public int getStatusCodeOfReview(int reviewId) {
         int statusCode;
-        try{
+        try {
             String urlRequest = "http://localhost:8082/reviews/search/" + reviewId;
             URL url = new URL(urlRequest);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
 
