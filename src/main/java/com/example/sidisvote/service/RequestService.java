@@ -23,7 +23,7 @@ public class RequestService {
     }
 
     public UserDetailsDTO makeRequestToAutentication(String jwt) {
-        String urlRequest = "http://localhost:8084/auth/search" + jwt;
+        String urlRequest = "http://localhost:8084/auth/search/" + jwt;
         UserDetailsDTO user = null;
         try {
             InputStream responseStream = openConn(urlRequest).getInputStream();
