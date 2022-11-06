@@ -79,6 +79,19 @@ public class RequestService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if (statusCode!=200){
+            try {
+                String urlRequest = "http://localhost:8086/reviews/vote/"+rid+"/"+str;
+                URL url = new URL(urlRequest);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                statusCode = connection.getResponseCode();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return statusCode;
     }
 }
