@@ -53,6 +53,8 @@ public class VoteService {
         List<VoteDTO> votes = repository.findVotesInReview(idReview);
         if (votes == null){
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
+        } else if (votes.isEmpty()) {
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
         }
         return votes;
     }
