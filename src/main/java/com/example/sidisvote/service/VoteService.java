@@ -41,7 +41,10 @@ public class VoteService {
             throw  new ResponseStatusException(HttpStatus.FORBIDDEN, "Can´t make another vote on this review");
         }
         Vote vote = new Vote(resource.getVote(),reviewId,user.getId());
+        int res=service.updateReview(reviewId,resource.getVote());
+
         repository.save(vote);
+
         VoteDTO reviewDTO = new VoteDTO(vote);
         return reviewDTO;
     }

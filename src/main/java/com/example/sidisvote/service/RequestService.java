@@ -62,4 +62,23 @@ public class RequestService {
         }
         return statusCode;
     }
+
+    public int updateReview(int rid, boolean vote){ //str true false
+        int statusCode;
+        String str="";
+        if(vote)str="true";
+        else str="false";
+        try {
+            String urlRequest = "http://localhost:8082/reviews/vote/"+rid+"/"+str;
+            URL url = new URL(urlRequest);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            statusCode = connection.getResponseCode();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return statusCode;
+    }
 }
