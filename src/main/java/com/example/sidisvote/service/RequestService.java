@@ -46,17 +46,30 @@ public class RequestService {
         return vote;
     }
 
-    public UserDetailsDTO makeRequestToAutentication(String jwt) {
+    public UserDetailsDTO makeRequestToAutentication(String jwt){
         String urlRequest = "http://localhost:8084/auth/search/" + jwt;
+        int statusCode=0;
         UserDetailsDTO user = null;
         try {
-            InputStream responseStream = openConn(urlRequest).getInputStream();
+            HttpURLConnection connection = openConn(urlRequest);
+            InputStream responseStream = connection.getInputStream();
 
             ObjectMapper mapper = new ObjectMapper();
-
+            statusCode = connection.getResponseCode();
             user = mapper.readValue(responseStream, UserDetailsDTO.class);
         } catch (IOException e) {
             System.out.println(e);
+        }
+        if (statusCode!=200){
+            try {
+                urlRequest = "http://localhost:8088/auth/search/" + jwt;
+                HttpURLConnection connection = openConn(urlRequest);
+                InputStream responseStream = connection.getInputStream();
+                ObjectMapper mapper = new ObjectMapper();
+                user = mapper.readValue(responseStream, UserDetailsDTO.class);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return user;
