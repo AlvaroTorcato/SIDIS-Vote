@@ -55,11 +55,15 @@ public class VoteService {
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
         } else if (votes.isEmpty()) {
             votes = service.retrieveVoteFromApi(idReview);
-            if (votes == null){
+            if (votes.isEmpty()){
                 throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Vote Not Found");
             }
         }
         return votes;
     }
 
+    public List<VoteDTO> searchVotesInternal(int idReview) {
+        List<VoteDTO> votes = repository.findVotesInReview(idReview);
+        return votes;
+    }
 }

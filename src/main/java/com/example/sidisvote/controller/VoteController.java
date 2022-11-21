@@ -33,4 +33,10 @@ public class VoteController {
     public List<VoteDTO> searchVotes(@PathVariable("idReview") final int idReview) throws IOException {
         return service.searchVotes(idReview);
     }
+
+    @Operation(summary = "Search for votes in review from another Api")
+    @GetMapping(value = "/internalSearch/{idReview}")
+    public List<VoteDTO> searchVotesInternal(@PathVariable("idReview") final int idReview) throws IOException {
+        return service.searchVotesInternal(idReview);
+    }
 }

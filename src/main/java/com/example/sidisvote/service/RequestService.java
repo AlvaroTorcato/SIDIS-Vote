@@ -29,7 +29,7 @@ public class RequestService {
         return null;
     }
     public List<VoteDTO> retrieveVoteFromApi(int reviewId) throws IOException {
-        String baseUrl = baseURL+"votes/search/"+reviewId;
+        String baseUrl = baseURL+"votes/internalSearch/"+reviewId;
         List<VoteDTO> vote= new ArrayList<>();
         try {
             InputStream responseStream = openConn(baseUrl).getInputStream();
@@ -83,6 +83,19 @@ public class RequestService {
             statusCode = connection.getResponseCode();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        if (statusCode == 404){
+            try {
+                String urlRequest = "http://localhost:8086/reviews/internalSearch/" + reviewId;
+                URL url = new URL(urlRequest);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                statusCode = connection.getResponseCode();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return statusCode;
     }
